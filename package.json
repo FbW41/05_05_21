@@ -1,0 +1,20 @@
+{
+  "name": "myfirstexpresssite",
+  "version": "1.0.0",
+  "description": "my first expressjs website",
+  "main": "server.js",
+  "scripts": {
+    "start": "nodemon server.js"
+  },
+  "author": "arif",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^0.21.1",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "express-session": "^1.17.1",
+    "hbs": "^4.1.2",
+    "mongoose": "^5.12.5",
+    "nodemon": "^2.0.7"
+  }
+}

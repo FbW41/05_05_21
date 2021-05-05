@@ -1,0 +1,11 @@
+body {
+    background-color: burlywood;
+    color: tomato;
+}
+ul li {
+    color: white;
+    background-color: teal;
+}
+.img-test {
+    border-radius: 50%;
+}
