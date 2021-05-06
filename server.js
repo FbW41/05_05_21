@@ -8,6 +8,23 @@ const userRouter = require('./routes/userRouter');
 const productRouter = require('./routes/productRouter');
 
 const session = require('express-session');
+// Custom Helper
+const hbs = require('hbs');
+hbs.registerHelper('capital', (username)=>{
+    return username.toUpperCase() + 'Ahmad';
+})
+
+hbs.registerHelper('ifEqual', (arg1, arg2, option)=>{
+    return (arg1==arg2)? option.fn(this): option.inverse(this)
+//    if(arg1 == arg2) {
+//        return option.fn(this) 
+//    }
+//    else {
+//        return option.inverse(this)
+//    }
+})
+
+
 /**
  * process.env means in the machine processes has an environment
  * process.env.PORT means this process environment has a variable called PORT
@@ -53,10 +70,17 @@ app.get('/searchByName', (req, res)=> {
         res.json(data)
     })
 })
-
 app.use('/', indexRouter)
 app.use('/user', userRouter)
 app.use('/product', productRouter)
+/**
+ * Error Route handler
+ * only runs when no other routes matches
+ * asteric(*) means any routes
+ */
+app.get('*', (req, res)=> {
+    res.render('error')
+})
 
 // listen app with port
 app.listen(PORT, ()=>{

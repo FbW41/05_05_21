@@ -15,10 +15,10 @@ const userSchema = new Schema({
     age: Number,
     email: String,
     gender: String,
-    password: String,
+    password: String, // 1234->hash(1234)->D128761872avsvasfcaD
     country: String,
     salary: Number,
-    role: String // ceo, admin, hr, employee, customer
+    role: Boolean // true/false
 })
 
 // declare Schema as a model

@@ -1,8 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const User = require('../models/User')
-const url = require('url')
 const auth = require('../config/auth')
+const bcrypt = require('bcrypt');
 
 router.get('/profile', auth.permission, (req, res)=>{
     res.render('profile', {
@@ -46,25 +46,42 @@ router.post('/login', (req, res)=>{
         }
         else {
            // check password
-           if(data.password!==req.body.password) { //not equal value and type
-                res.render('login', {
-                    msg:'Password doesnot match! Please try again!'
-                })
-           }
-           else {
+           // compare hash password with user password
+           bcrypt.compare(req.body.password, data.password, (err, result)=>{
+              if(result){
                // Store data or user into session                
                req.session.user = data; 
                res.redirect('/user/profile')
-           }
+              }
+              else {
+                res.render('login', {
+                    msg:'Password doesnot match! Please try again!'
+                })
+              }
+           })
         }
-        //res.json(data) // test 2
-        //res.redirect('/user/login') no data can se sent when redirect
-        // res.redirect(url.format({ // also send data
-        //     pathname: '/user/login',
-        //     query: {
-        //         msg: 'Email or password is invalid! Please try with the correct Data'
-        //     }
-        // }))
+    })
+})
+
+// signup form
+router.get('/signup', (req, res)=>{
+    res.render('signup')
+})
+
+// create a account
+router.post('/signup', (req, res)=> {
+    // hash a password using bcrypt
+    // salt is the number of level that hash will create using a loop
+    const userPassword = req.body.password; // 1234
+    const saltRound = 10;
+    // encrypting the password
+    bcrypt.hash(userPassword, saltRound, (err, hashPassword)=>{
+        req.body.password = hashPassword;
+        const newUser = new User(req.body);
+        newUser.save((err, doc)=>{
+            if(err) throw err;
+            res.json(doc)
+        }) 
     })
 })
 
