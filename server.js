@@ -7,6 +7,30 @@ const indexRouter = require('./routes/indexRouter');
 const userRouter = require('./routes/userRouter');
 const productRouter = require('./routes/productRouter');
 
+// Multer settings
+/**
+ * multer: a middleware module
+ * it can take multipart form data e.g: images, pdf, video files
+ */
+const multer = require('multer');
+// basic test
+// const upload = multer({
+//     dest: 'public/upload/image'
+// })
+
+const storage = multer.diskStorage({
+    // where to upload
+    destination: function(req, file, callback) {
+      callback(null, 'public/upload/image')
+    },
+    // giving a file name as we want
+    filename: function(req, file, callback) {
+        callback(null, Date.now() + file.originalname)
+    }
+})
+const upload = multer({storage})
+
+
 const session = require('express-session');
 // Custom Helper
 const hbs = require('hbs');
@@ -61,6 +85,43 @@ app.use(express.urlencoded({
 // Routing
 
 const User = require('./models/User')
+
+
+
+// Test  file upload form
+app.get('/uploadForm', (req, res)=>{
+    res.render('fileForm')
+})
+// test file upload process
+app.post('/upload/file', upload.single('profile_pic'), (req, res)=>{
+    console.log('data from form: ', req.file)
+    res.json(req.file)
+})
+
+
+// Test Faker.js by this route
+/**
+ * Get the fake data from faker.js api
+ * see the data in console
+ * display the data in browser using render()
+ */
+const faker = require('faker');
+app.get('/test/fakeData', (req, res)=> {
+    const userData = {
+        name: {
+            firstName: faker.name.firstName(),
+            lastName: faker.name.lastName()
+        },
+        profile_pic: faker.image.avatar(),
+        email: faker.internet.email(),
+        phone: faker.phone.phoneNumber()
+    }
+    //res.json(userData)
+    res.render('fake_profile', {user: userData})
+})
+
+
+
 // test mongoose query methods
 app.get('/searchByName', (req, res)=> {
     //res.json('test ok') // check route test ok

@@ -73,8 +73,8 @@ router.post('/signup', (req, res)=> {
     // hash a password using bcrypt
     // salt is the number of level that hash will create using a loop
     const userPassword = req.body.password; // 1234
-    const saltRound = 10;
-    // encrypting the password
+    const saltRound = 10; // hg2182712871289
+    // encrypting the password: Async way
     bcrypt.hash(userPassword, saltRound, (err, hashPassword)=>{
         req.body.password = hashPassword;
         const newUser = new User(req.body);
@@ -83,6 +83,15 @@ router.post('/signup', (req, res)=> {
             res.json(doc)
         }) 
     })
+
+    // Sync way: Blocking way
+    // const hashPassword = bcrypt.hashSync(userPassword, saltRound); // wait
+    // req.body.password = hashPassword;
+    // const newUser = new User(req.body);
+    // newUser.save((err, doc)=>{
+    //     if(err) throw err;
+    //     res.json(doc)
+    // }) 
 })
 
 module.exports = router;
