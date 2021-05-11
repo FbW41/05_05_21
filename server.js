@@ -119,7 +119,7 @@ app.post('/upload/many', upload.array('pictures'),(req, res)=>{
      * 2. add old data + new data (e.g push())
      * 3. update the gallery with new array
      */
-    User.findByIdAndUpdate(userId, {gallery: all_pics}, (err, user)=>{
+    User.findByIdAndUpdate(userId, {$push: {gallery: all_pics}}, (err, user)=>{
         res.redirect('/upload/many');
     })   
 })
