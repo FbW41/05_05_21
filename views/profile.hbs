@@ -1,6 +1,8 @@
 <h1>Profile page</h1>
 <h2>User data:</h2>
 {{#if user}}
+<img src="/upload/image/{{user.my_picture}}">
+
  <h3>User Name: 
      {{capital user.name}}
  </h3>
@@ -10,3 +12,10 @@
 {{#ifEqual user.gender 'male'}} 
 <h1>User is a Male</h1>
 {{/ifEqual}}
+
+<form action="/upload/file" method="POST" enctype="multipart/form-data">
+    <label>Upload a Picture</label>
+    <input type="file" name="profile_pic">
+    <br>
+    <button type="submit" class="btn btn-success">Upload</button>
+</form>

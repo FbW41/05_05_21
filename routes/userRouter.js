@@ -5,8 +5,11 @@ const auth = require('../config/auth')
 const bcrypt = require('bcrypt');
 
 router.get('/profile', auth.permission, (req, res)=>{
-    res.render('profile', {
-        user: req.session.user
+    const userId = req.session.user._id;
+    User.findById(userId, (err, user)=>{
+        res.render('profile', {
+            user
+        })
     })
 })
 

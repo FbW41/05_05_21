@@ -18,7 +18,7 @@ const userSchema = new Schema({
     password: String, // 1234->hash(1234)->D128761872avsvasfcaD
     country: String,
     salary: Number,
-    role: Boolean // true/false
+    my_picture: String
 })
 
 // declare Schema as a model

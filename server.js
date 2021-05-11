@@ -6,6 +6,7 @@ require('dotenv').config()
 const indexRouter = require('./routes/indexRouter');
 const userRouter = require('./routes/userRouter');
 const productRouter = require('./routes/productRouter');
+const auth = require('./config/auth')
 
 // Multer settings
 /**
@@ -13,19 +14,15 @@ const productRouter = require('./routes/productRouter');
  * it can take multipart form data e.g: images, pdf, video files
  */
 const multer = require('multer');
-// basic test
-// const upload = multer({
-//     dest: 'public/upload/image'
-// })
-
 const storage = multer.diskStorage({
     // where to upload
     destination: function(req, file, callback) {
+      // callback(error, upload path)
       callback(null, 'public/upload/image')
     },
     // giving a file name as we want
     filename: function(req, file, callback) {
-        callback(null, Date.now() + file.originalname)
+        callback(null, Date.now()+ '_profile_' + file.originalname)
     }
 })
 const upload = multer({storage})
@@ -93,9 +90,22 @@ app.get('/uploadForm', (req, res)=>{
     res.render('fileForm')
 })
 // test file upload process
-app.post('/upload/file', upload.single('profile_pic'), (req, res)=>{
+app.post('/upload/file', auth.permission, upload.single('profile_pic'), (req, res)=>{
     console.log('data from form: ', req.file)
-    res.json(req.file)
+    if(req.file.mimetype == ('image/jpeg'|| 'image/png' || 'image/jpg')) {
+        console.log(req.session.user._id)
+        const userId = req.session.user._id;
+        User.findByIdAndUpdate(userId, {
+            my_picture: req.file.filename,
+            country: 'Germany'
+        }, (err, doc)=>{
+            console.log(doc)
+            res.redirect('/user/profile'); // another path or route
+        })
+    }
+    else {
+        res.send('This is not a Picture! Try a Picture')
+    }
 })
 
 
