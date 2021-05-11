@@ -18,7 +18,8 @@ const userSchema = new Schema({
     password: String, // 1234->hash(1234)->D128761872avsvasfcaD
     country: String,
     salary: Number,
-    my_picture: String
+    my_picture: String, // single picture
+    gallery: [{}]
 })
 
 // declare Schema as a model

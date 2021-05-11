@@ -1,0 +1,15 @@
+<h1>Gallery for many pictures</h1>
+<form action="/upload/many" method="POST" enctype="multipart/form-data">
+    <label>Upload many Picture</label>
+    <input type="file" name="pictures" multiple>
+    <br>
+    <button type="submit" class="btn btn-success">Upload All</button>
+</form>
+
+{{#if all_pics}}
+{{#each all_pics}}
+  <div class="card" style="width: 18rem;">
+     <img src="/upload/image/{{filename}}" class="card-img-top" alt="...">
+  </div>
+{{/each}}
+{{/if}}
